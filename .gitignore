@@ -1,0 +1,13 @@
+# Prerequisites
+*.d
+
+# Object files
+*.o
+*.obj
+*.res
+
+
+
+*.exe
+build/**
+CBbuild/**
