@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - '*'
+    tags:
+      - v*
+  pull_request:
+  repository_dispatch:
+    types: [run_build]
+
+jobs:
+  build-win:
+    runs-on: ubuntu-latest
+    container: dockcross/windows-static-x86:latest
+    steps:
+
+    - uses: actions/checkout@v2
+    - run: |
+        git fetch --prune --unshallow
+    - name: Compile project
+      run: |
+        DATEE=`date '+[%Y-%m-%d]'`
+        mv LICENSE LICENSE.TXT
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_BUILD_TYPE=Release
+        make clean all
+        7z a -t7z ROMIMG.7z ROMIMG.exe ../LICENSE.TXT ../README.md
+        
+    - name: Upload artifacts
+      if: ${{ success() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: ROMIMG_BIN
+        path: |
+             build/ROMIMG.7z
+             
+    - name: Deploy pre-release
+      uses: softprops/action-gh-release@v1
+      if: (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
+      with:
+        token: "${{ secrets.GITHUB_TOKEN }}"
+        fail_on_unmatched_files: true
+        files: |
+            build/ROMIMG.7z
+        name: "Latest build"
+        tag_name: "Latest"
+        prerelease: true
