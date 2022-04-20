@@ -29,13 +29,13 @@ static void DisplayROMImgDetails(const ROMIMG *ROMImg){
 }
 
 static void DisplaySyntaxHelp(void){
-	printf(	"Syntax error. Syntax:\n"
-		"\tCreate ROM image\t\t\t- ROMIMG /c <ROM image> <files>\n"
-		"\tList files in ROM image\t\t\t- ROMIMG /l <ROM image>\n"
-		"\tAdd file(s) to ROM image\t\t- ROMIMG /a <ROM image> <file(s)>\n"
-		"\tDelete file(s) from ROM image\t\t- ROMIMG /d <ROM image> <file(s)>\n"
-		"\tExtract all files from ROM image\t- ROMIMG /x <ROM image>\n"
-		"\tExtract file from ROM image\t\t- ROMIMG /x <ROM image> <file>\n");
+	printf("Syntax error. Syntax:\n"
+		"ROMIMG -c <ROM image> <files>\n\tCreate ROM image\n"
+		"ROMIMG -l <ROM image>\n\tList files in ROM image\n"
+		"ROMIMG -a <ROM image> <file(s)>\n\tAdd file(s) to ROM image\n"
+		"ROMIMG -d <ROM image> <file(s)>\n\tDelete file(s) from ROM image\n"
+		"ROMIMG -x <ROM image>\n\tExtract all files from ROM image\n"
+		"ROMIMG -x <ROM image> <file>\n\tExtract file from ROM image\n");
 }
 
 static void DisplayAddDeleteOperationResult(int result, const char *InvolvedFile){
@@ -73,7 +73,7 @@ int main(int argc, char** argv){
 		return EINVAL;
 	}
 
-	if(argc>=4 && strcmp(argv[1], "/c")==0){
+	if(argc>=4 && strcmp(argv[1], "-c")==0){
 		if((result=CreateBlankROMImg(argv[2], &ROMImg))==0){
 			for(FilesAffected=0,i=0; i<argc-3; i++){
 				printf("Adding file %s...", argv[3+i]);
@@ -89,7 +89,7 @@ int main(int argc, char** argv){
 		}
 		else printf("(Internal fault) Can't create blank image file: %d. Please report.\n", result);
 	}
-	else if(argc>=4 && strcmp(argv[1], "/a")==0){
+	else if(argc>=4 && strcmp(argv[1], "-a")==0){
 		if((result=LoadROMImg(&ROMImg, argv[2]))==0){
 			for(i=0,FilesAffected=0; i<argc-3; i++){
 				printf("Adding file %s...", argv[3+i]);
@@ -105,7 +105,7 @@ int main(int argc, char** argv){
 		}
 		else printf("Can't load image file: %s\n", argv[2]);
 	}
-	else if(argc>=4 && strcmp(argv[1], "/d")==0){
+	else if(argc>=4 && strcmp(argv[1], "-d")==0){
 		if((result=LoadROMImg(&ROMImg, argv[2]))==0){
 			for(i=0,FilesAffected=0; i<argc-3; i++){
 				printf("Removing file %s...", argv[3+i]);
@@ -121,14 +121,14 @@ int main(int argc, char** argv){
 		}
 		else printf("Can't load image file: %s\n", argv[2]);
 	}
-	else if(argc==3 && strcmp(argv[1], "/l")==0){
+	else if(argc==3 && strcmp(argv[1], "-l")==0){
 		if((result=LoadROMImg(&ROMImg, argv[2]))==0){
 			DisplayROMImgDetails(&ROMImg);
 			UnloadROMImg(&ROMImg);
 		}
 		else printf("Can't load image file: %s\n", argv[2]);
 	}
-	else if((argc==3 || argc==4) && strcmp(argv[1], "/x")==0){
+	else if((argc==3 || argc==4) && strcmp(argv[1], "-x")==0){
 		if((result=LoadROMImg(&ROMImg, argv[2]))==0){
 			if(argc==3){
 				printf(	"File list:\n"
