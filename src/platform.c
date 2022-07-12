@@ -3,7 +3,12 @@
 */
 
 #include <errno.h>
+
+#ifdef __unix__
+#include <unistd.h>
+#elif defined(_WIN32) || defined(WIN32)
 #include <windows.h>
+#endif
 
 #include "platform.h"
 
