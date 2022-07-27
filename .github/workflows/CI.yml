@@ -13,10 +13,10 @@ on:
 jobs:
 
   clean_release:
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
     - name: delete previous tag/release
+      if: github.ref == 'refs/heads/main'
       uses: dev-drprasad/delete-tag-and-release@v0.2.0
       with:
         delete_release: true
