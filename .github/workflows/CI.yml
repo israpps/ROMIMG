@@ -13,10 +13,10 @@ on:
 jobs:
 
   clean_release:
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
     - name: delete previous tag/release
+      if: github.ref == 'refs/heads/main'
       uses: dev-drprasad/delete-tag-and-release@v0.2.0
       with:
         delete_release: true
@@ -47,15 +47,15 @@ jobs:
         cd build
         cmake .. -DCMAKE_BUILD_TYPE=Release
         make clean all
-        7z a -t7z ROMIMG.7z ROMIMG* ../LICENSE.TXT ../README.md
+        7z a -t7z ${{ github.event.repository.name }}-${{ matrix.toolchain }}.7z ROMIMG* ../LICENSE.TXT ../README.md
 
     - name: Upload artifacts
       if: ${{ success() }}
       uses: actions/upload-artifact@v2
       with:
-        name: ROMIMG_BIN
+        name: ${{ github.event.repository.name }}-${{ matrix.toolchain }}
         path: |
-             build/ROMIMG.7z
+             build/${{ github.event.repository.name }}*.7z
 
     - name: Deploy pre-release
       uses: softprops/action-gh-release@v1
@@ -64,7 +64,7 @@ jobs:
         token: "${{ secrets.GITHUB_TOKEN }}"
         fail_on_unmatched_files: true
         files: |
-            build/ROMIMG.7z
+            build/${{ github.event.repository.name }}*.7z
         name: "Latest build"
         tag_name: "Latest"
         prerelease: true

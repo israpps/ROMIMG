@@ -131,6 +131,11 @@ int main(int argc, char** argv){
 	else if((argc==3 || argc==4) && strcmp(argv[1], "-x")==0){
 		if((result=LoadROMImg(&ROMImg, argv[2]))==0){
 			if(argc==3){
+				char FOLDER[256] = "ext_";
+				strcat(FOLDER, argv[2]);
+				mkdir(FOLDER);
+				chdir(FOLDER);
+				
 				printf(	"File list:\n"
 					"Name      \tSize\n"
 					"-----------------------------\n");
