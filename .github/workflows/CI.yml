@@ -27,7 +27,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-       toolchain: ["windows-static-x86", "linux-x86"] #, "windows-static-x64"]
+       toolchain: ["windows-static-x86", "linux-x86", "linux-x64"] #, "windows-static-x64"]
     runs-on: ubuntu-latest
     needs: [clean_release]
     container: dockcross/${{ matrix.toolchain }}:latest
