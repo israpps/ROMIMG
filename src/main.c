@@ -143,7 +143,11 @@ int main(int argc, char **argv)
             if (argc == 3) {
                 char FOLDER[256] = "ext_";
                 strcat(FOLDER, argv[2]);
-                mkdir(FOLDER, 0755);
+                mkdir(FOLDER
+#ifdef __unix__
+                ,0755
+#endif
+                );
                 chdir(FOLDER);
 
                 printf("File list:\n"
