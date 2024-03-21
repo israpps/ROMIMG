@@ -5,6 +5,8 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #include "romimg.h"
 
@@ -27,7 +29,7 @@ static void DisplayROMImgDetails(const ROMIMG *ROMImg)
         printf(GREEN"%-10s"DEFCOL"\t%u\n", filename, file->RomDir.size);
     }
 
-    printf("\nTotal size: %d bytes.\n", TotalSize);
+    printf("\nTotal size: %u bytes.\n", TotalSize);
 }
 
 static void DisplaySyntaxHelp(void)
@@ -85,10 +87,10 @@ int main(int argc, char **argv)
     if (argc >= 4 && strcmp(argv[1], "-c") == 0) {
         if ((result = CreateBlankROMImg(argv[2], &ROMImg)) == 0) {
             for (FilesAffected = 0, i = 0; i < argc - 3; i++) {
-                printf("Adding file %s... ", argv[3 + i]);
+                printf("Adding file '%s'", argv[3 + i]);
                 if ((result = AddFile(&ROMImg, argv[3 + i])) == 0)
                     FilesAffected++;
-                printf(result == 0 ? GRNBOLD"done!"DEFCOL"\n" : REDBOLD"failed!"DEFCOL"\n");
+                printf(result == 0 ? GRNBOLD" done!"DEFCOL"\n" : REDBOLD" failed!"DEFCOL"\n");
             }
 
             if (FilesAffected > 0) {
@@ -101,7 +103,7 @@ int main(int argc, char **argv)
     } else if (argc >= 4 && strcmp(argv[1], "-a") == 0) {
         if ((result = LoadROMImg(&ROMImg, argv[2])) == 0) {
             for (i = 0, FilesAffected = 0; i < argc - 3; i++) {
-                printf("Adding file %s... ", argv[3 + i]);
+                printf("Adding file '%s'", argv[3 + i]);
                 if ((result = AddFile(&ROMImg, argv[3 + i])) == 0)
                     FilesAffected++;
                 DisplayAddDeleteOperationResult(result, argv[3 + i]);
@@ -141,7 +143,7 @@ int main(int argc, char **argv)
             if (argc == 3) {
                 char FOLDER[256] = "ext_";
                 strcat(FOLDER, argv[2]);
-                mkdir(FOLDER);
+                mkdir(FOLDER, 0755);
                 chdir(FOLDER);
 
                 printf("File list:\n"
