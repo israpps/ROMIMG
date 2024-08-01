@@ -41,7 +41,7 @@ enum ExtInfoFieldTypes {
 	EXTINFO_FIELD_TYPE_DATE = 1,
 	EXTINFO_FIELD_TYPE_VERSION,
 	EXTINFO_FIELD_TYPE_COMMENT,
-	EXTINFO_FIELD_TYPE_NULL = 0x7F
+	EXTINFO_FIELD_TYPE_FIXED = 0x7F // Must exist at a fixed location.
 };
 
 struct FileEntry
