@@ -123,7 +123,7 @@ static int GetExtInfoStat(const struct ROMImgStat *ImageStat, struct RomDirFileF
 			}
 
 			offset += sizeof(struct ExtInfoFieldEntry);
-		} else if (ExtInfoEntry->type == EXTINFO_FIELD_TYPE_NULL) {
+		} else if (ExtInfoEntry->type == EXTINFO_FIELD_TYPE_FIXED) {
 			result = 0;
 			break;
 		} else {
