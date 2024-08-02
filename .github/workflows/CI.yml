@@ -14,14 +14,14 @@ jobs:
   clean_release:
     runs-on: ubuntu-latest
     steps:
-    - name: delete previous tag/release
+    - name: Create prerelease
       if: github.ref == 'refs/heads/main'
-      uses: dev-drprasad/delete-tag-and-release@v1.0
+      uses: mathieucarbou/marvinpinto-action-automatic-releases@latest
       with:
-        delete_release: true
-        tag_name: "latest"
-      env:
-       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        prerelease: true
+        automatic_release_tag: "Latest"
+        title: "Latest build"
 
   build-win:
     strategy:
