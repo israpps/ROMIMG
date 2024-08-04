@@ -26,7 +26,18 @@ static void DisplayROMImgDetails(const ROMIMG *ROMImg)
     for (i = 0, file = ROMImg->files, TotalSize = 0; i < ROMImg->NumFiles; TotalSize += file->RomDir.size, i++, file++) {
         strncpy(filename, file->RomDir.name, sizeof(filename) - 1);
         filename[sizeof(filename) - 1] = '\0';
-        printf(GREEN"%-10s"DEFCOL"\t%u\n", filename, file->RomDir.size);
+        struct ExtInfoFieldEntry* S = (struct ExtInfoFieldEntry*)file->ExtInfoData;
+        int x = file->RomDir.ExtInfoEntrySize/sizeof(struct ExtInfoFieldEntry);
+        for (int z = 0; z < x; z++, S++)
+        {
+            if (S->type == EXTINFO_FIELD_TYPE_FIXED) {
+                printf(YELBOLD);
+                break;
+            }
+        }
+        if (S->type != EXTINFO_FIELD_TYPE_FIXED) printf(GREEN);
+        printf(" %-10s"DEFCOL"\t%u\n",
+         filename, file->RomDir.size);
     }
 
     printf("\nTotal size: %u bytes.\n", TotalSize);
