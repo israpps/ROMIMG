@@ -1,5 +1,9 @@
 ROM Image Generator by SP193
 
+> [!WARNING]
+> This program has been surpassed by a new one made by me and @AKuHAK
+> 
+> [find it here](https://github.com/israpps/romman)
 
 ## Introduction
 > ROMIMG is a tool that handles IOP image files (e.g. those IOPRP images and the boot ROM image itself) that are used for IOP resets or for just storing files.
